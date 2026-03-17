@@ -27,6 +27,7 @@ class DashboardStats {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
+
       'value': value,
       'subtitle': subtitle,
       // 'percentage': percentage,

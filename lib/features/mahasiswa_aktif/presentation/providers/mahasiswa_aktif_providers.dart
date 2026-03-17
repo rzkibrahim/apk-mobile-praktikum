@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modul_2/features/mahasiswa/data/models/mahasiswa_model.dart';
+import 'package:modul_2/features/mahasiswa_aktif/data/models/mahasiswa_aktif_model.dart';
 import 'package:modul_2/features/mahasiswa_aktif/data/repositories/mahasiswa_aktif_repositories.dart';
 
 // Repository Provider
@@ -10,7 +10,7 @@ final mahasiswaAktifRepositoryProvider =
 
 // StateNotifier untuk mengelola state mahasiswa aktif
 class MahasiswaAktifNotifier
-    extends StateNotifier<AsyncValue<List<MahasiswaModel>>> {
+    extends StateNotifier<AsyncValue<List<MahasiswaAktifModel>>> {
   final MahasiswaAktifRepository _repository;
 
   MahasiswaAktifNotifier(this._repository) : super(const AsyncValue.loading()) {
@@ -37,7 +37,7 @@ class MahasiswaAktifNotifier
 // Mahasiswa Aktif Notifier Provider
 final mahasiswaAktifNotifierProvider = StateNotifierProvider.autoDispose<
     MahasiswaAktifNotifier,
-    AsyncValue<List<MahasiswaModel>>>((ref) {
+    AsyncValue<List<MahasiswaAktifModel>>>((ref) {
   final repository = ref.watch(mahasiswaAktifRepositoryProvider);
   return MahasiswaAktifNotifier(repository);
 });

@@ -1,53 +1,31 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modul_2/core/widgets/common_widgets.dart';
-import 'package:modul_2/features/mahasiswa_aktif/presentation/providers/mahasiswa_aktif_providers.dart';
-import 'package:modul_2/features/mahasiswa/presentation/widgets/mahasiswa_widgets.dart';
+class MahasiswaAktifModel {
+  final int userId;
+  final int id;
+  final String title;
+  final String body;
 
-class MahasiswaAktifPage extends ConsumerWidget {
-  const MahasiswaAktifPage({super.key});
+  MahasiswaAktifModel({
+    required this.userId,
+    required this.id,
+    required this.title,
+    required this.body,
+  });
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final mahasiswaAktifState = ref.watch(mahasiswaAktifNotifierProvider);
+  factory MahasiswaAktifModel.fromJson(Map<String, dynamic> json) {
+    return MahasiswaAktifModel(
+      userId: json['userId'] ?? 0,
+      id: json['id'] ?? 0,
+      title: json['title'] ?? '',
+      body: json['body'] ?? '',
+    );
+  }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mahasiswa Aktif'),
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh_rounded),
-            onPressed: () {
-              ref.invalidate(mahasiswaAktifNotifierProvider);
-            },
-            tooltip: 'Refresh',
-          ), // IconButton
-        ],
-      ), // AppBar
-      body: mahasiswaAktifState.when(
-        // State: Loading
-        loading: () => const LoadingWidget(),
-
-        // State: Error
-        error: (error, stack) => CustomErrorWidget(
-          message: 'Gagal memuat data mahasiswa aktif: ${error.toString()}',
-          onRetry: () {
-            ref.read(mahasiswaAktifNotifierProvider.notifier).refresh();
-          },
-        ), // CustomErrorWidget
-
-        // State: data mahasiswa aktif berhasil dimuat
-        data: (mahasiswaList) {
-          return MahasiswaListView(
-            mahasiswaList: mahasiswaList,
-            onRefresh: () async {
-              ref.invalidate(mahasiswaAktifNotifierProvider);
-            },
-            useModernCard: true,
-          ); // MahasiswaListView
-        },
-      ),
-    ); // Scaffold
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': userId,
+      'id': id,
+      'title': title,
+      'body': body,
+    };
   }
 }
