@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   provider: ^6.1.5+1
-  flutter_riverpod: ^2.4.0
+  flutter_riverpod: ^2.6.1
   http: ^1.2.2
   dio: ^5.4.0
 

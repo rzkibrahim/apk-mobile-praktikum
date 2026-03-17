@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modul_2/features/dashboard/presentation/widgets/dashboard_widgets.dart';
 import 'package:modul_2/features/dosen/presentation/pages/dosen_page.dart';
 import 'package:modul_2/features/mahasiswa/presentation/pages/mahasiswa_page.dart';
-import 'package:modul_2/features/mahasiswa_aktif/data/models/mahasiswa_aktif_model.dart';
+import 'package:modul_2/features/mahasiswa_aktif/presentation/pages/mahasiswa_aktif_page.dart';
 import 'package:modul_2/features/profile/presentation/pages/profile_page.dart';
 import '../../../../../core/constants/app_constants.dart';
 import '../../../../../core/widgets/common_widgets.dart';
