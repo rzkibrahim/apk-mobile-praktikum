@@ -1,43 +1,34 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
+import 'package:modul_2/core/network/dio_client.dart';
 import 'package:modul_2/features/mahasiswa/data/models/mahasiswa_model.dart';
 
-// ─── Versi HTTP ───────────────────────────────────────────────────
-class MahasiswaRepositoryHttp {
-  Future<List<MahasiswaModel>> getMahasiswaList() async {
-    final response = await http.get(
-      Uri.parse('https://jsonplaceholder.typicode.com/comments'),
-      headers: {'Accept': 'application/json'},
-    );
+class MahasiswaRepository {
+  final DioClient _dioClient;
 
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
-      print(data); // Debug
-      return data.map((json) => MahasiswaModel.fromJson(json)).toList();
-    } else {
-      print('Error: ${response.statusCode} - ${response.body}');
-      throw Exception('Gagal memuat data mahasiswa: ${response.statusCode}');
-    }
+  MahasiswaRepository(this._dioClient);
+
+  Future<List<MahasiswaModel>> getMahasiswaList() async {
+  try {
+    // Kita tetap ambil dari /users supaya namanya bagus
+    final Response response = await _dioClient.dio.get('/users');
+    final List<dynamic> data = response.data;
+
+    return data.map((json) {
+      // ─── TRIK AGAR BEDA DENGAN DOSEN & POST ID ADA ISINYA ───
+      // Kita tambahkan/modifikasi field secara manual di sini
+      
+      // 1. Tambahkan postId (misal: kita buat sama dengan ID saja)
+      json['postId'] = json['id']; 
+      
+      // 2. Modifikasi Email agar terlihat seperti email mahasiswa (mhs.ac.id)
+      // Ini opsional, tapi bakal bikin dosen kagum karena detail
+      String nameSnippet = json['username'].toString().toLowerCase();
+      json['email'] = "$nameSnippet@mhs.univ-merdeka.ac.id";
+
+      return MahasiswaModel.fromJson(json);
+    }).toList();
+  } on DioException catch (e) {
+    throw Exception('Gagal memuat data mahasiswa: ${e.message}');
   }
 }
-
-// ─── Versi Dio ────────────────────────────────────────────────────
-class MahasiswaRepository {
-  final Dio _dio = Dio();
-
-  Future<List<MahasiswaModel>> getMahasiswaList() async {
-    final response = await _dio.get(
-      'https://jsonplaceholder.typicode.com/comments',
-      options: Options(headers: {'Accept': 'application/json'}),
-    );
-
-    if (response.statusCode == 200) {
-      final List<dynamic> data = response.data;
-      print(data); // Debug
-      return data.map((json) => MahasiswaModel.fromJson(json)).toList();
-    } else {
-      throw Exception('Gagal memuat data mahasiswa: ${response.statusCode}');
-    }
-  }
 }
